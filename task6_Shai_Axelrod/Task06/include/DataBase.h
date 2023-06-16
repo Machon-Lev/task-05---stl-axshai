@@ -9,10 +9,10 @@
 
 class DataBase {
 	std::map<std::string, Location> _data;
-	void fillFromFile(std::string fileName);
+	
 public:
-	DataBase(std::string fileName);
 	std::vector<std::pair<std::string, Location>> getCloseCities(std::string cityName, float radius, DistanceFunction distFormula);
 	Location getCityLoc(std::string cityName) const;
+	void fillFromFile(std::string fileName);
  };
 

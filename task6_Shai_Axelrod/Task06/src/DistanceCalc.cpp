@@ -1,4 +1,5 @@
 #include "DistanceClac.h"
+#include <stdexcept>
 
 static float  euclideanDistance(Location loc1, Location loc2) {
 	float dx = loc2.x - loc1.x;
@@ -25,7 +26,14 @@ std::map<std::string, float (*)(Location, Location)> DistanceCalc::_distancNorms
 
 DistanceFunction DistanceCalc::getNorm(std::string normName)
 {
-	return _distancNormsMap[normName];
+	try {
+		return _distancNormsMap.at(normName);
+	}
+	catch (const std::out_of_range& e) {
+		std::string errorMessage = "ERROR: '" + normName + "' isn't found as a norm name. Please try again.\n";
+		throw std::exception();
+		throw std::out_of_range(errorMessage.c_str());
+	}
 }
 
 float DistanceCalc::calcDistance(std::string normName, Location loc1, Location loc2)

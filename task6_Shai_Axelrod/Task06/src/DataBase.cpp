@@ -5,10 +5,7 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
-DataBase::DataBase(std::string fileName)
-{
-    fillFromFile(fileName);
-}
+
 void DataBase::fillFromFile(std::string fileName)
 {
     std::ifstream inputFile(fileName);
@@ -41,6 +38,10 @@ void DataBase::fillFromFile(std::string fileName)
             }
         }
     }
+    if (_data.empty())
+    {
+        throw std::exception("no cities found in file");
+    }
     
     // Print the map
     for (const auto& city : _data) {
@@ -55,16 +56,23 @@ void DataBase::fillFromFile(std::string fileName)
 std::vector<std::pair<std::string, Location>> DataBase::getCloseCities(std::string cityName, float radius, DistanceFunction distFormula)
 {
     Location cityLoc = getCityLoc(cityName);
-    DistanceFunction chebyshevDistance = DistanceCalc::getNorm("1");
     std::vector<std::pair<std::string, Location>> filtered;
     std::copy_if(_data.begin(), _data.end(), std::back_inserter(filtered),
-        [cityLoc, distFormula, radius, chebyshevDistance](const std::pair<const std::string, Location>& element) {
-            return DistanceCalc::calcDistance("1", cityLoc, element.second) < radius && distFormula(cityLoc, element.second) < radius;
+        [cityLoc, distFormula, radius](const auto& element) {
+            return DistanceCalc::calcDistance("1", cityLoc, element.second) < radius && 
+                distFormula(cityLoc, element.second) < radius;
         });
     return filtered;
 }
 
 Location DataBase::getCityLoc(std::string cityName) const
 {
-    return _data.find(cityName)->second;
+    try {
+        return _data.at(cityName);
+    }
+    catch (const std::out_of_range& e) {
+        std::string errorMessage = "ERROR: '" + cityName + "' isn't found in the city list. Please try again.\n";
+        throw std::out_of_range(errorMessage.c_str());
+    }
+
 }
