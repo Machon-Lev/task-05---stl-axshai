@@ -1,6 +1,7 @@
 #include "DistanceClac.h"
 #include <stdexcept>
 
+// euclidean Distance
 static float  euclideanDistance(Location loc1, Location loc2) {
 	float dx = loc2.x - loc1.x;
 	float dy = loc2.y - loc1.y;

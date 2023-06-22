@@ -27,7 +27,7 @@ void DataBase::fillFromFile(std::string fileName)
             if (std::getline(inputFile, coordinates)) {
                 std::istringstream coordsStream(coordinates);
 
-                // Extract the coordinates using the hyphen as a delimiter
+                // Extract the coordinates using the '-' as a delimiter
                 std::string xStr, yStr;
                 std::getline(coordsStream, xStr, '-');
                 std::getline(coordsStream, yStr);
@@ -45,15 +45,7 @@ void DataBase::fillFromFile(std::string fileName)
     if (_data.empty())
     {
         throw std::exception("no cities found in file");
-    }
-    /*
-    // Print the map
-    for (const auto& city : _data) {
-        std::cout << "City: " << city.first << ", X: " << city.second.x << ", Y: " << city.second.y << std::endl;
-
-    }
-    */
-    
+    }   
 }
 
 
@@ -61,6 +53,7 @@ std::vector<std::pair<std::string, Location>> DataBase::getCloseCities(std::stri
 {
     Location cityLoc = getCityLoc(cityName);
     std::vector<std::pair<std::string, Location>> filtered;
+    // retrieve the cities within the square created by the radius && within the radius
     std::copy_if(_data.begin(), _data.end(), std::back_inserter(filtered),
         [cityLoc, distFormula, radius](const auto& element) {
             return DistanceCalc::calcDistance("1", cityLoc, element.second) < radius && 
