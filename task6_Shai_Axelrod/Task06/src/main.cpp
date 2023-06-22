@@ -87,9 +87,10 @@ void searchResults(std::vector<std::pair<std::string, Location>>& vec, int allCi
 	std::cout << allCitiesCounter << " city/cities found in the given radius.\n";
 	std::cout << northernCitiesCounter << " cities are to the north of the selected city.\nCity list :\n";
 
-	for (int cityIndex = 1; cityIndex < vec.size(); cityIndex++) {
-		std::cout << vec[cityIndex].first << std::endl;
-	}
+	std::ostream_iterator<std::string> outIterator(std::cout, "\n");
+	std::transform(vec.begin(), vec.end(), outIterator, [](const auto& pair) {
+		return pair.first;
+		});
 	std::string clear;
 	std::getline(std::cin, clear);
 }

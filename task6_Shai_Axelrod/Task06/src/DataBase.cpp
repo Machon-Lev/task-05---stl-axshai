@@ -34,7 +34,11 @@ void DataBase::fillFromFile(std::string fileName)
 
                 location.x = std::stod(xStr);
                 location.y = std::stod(yStr);
-                _data[line] = location;
+                if (_data.find(line) == _data.end())
+                {                    
+                    _data[line] = location;
+                }
+                
             }
         }
     }
@@ -42,13 +46,13 @@ void DataBase::fillFromFile(std::string fileName)
     {
         throw std::exception("no cities found in file");
     }
-    
+    /*
     // Print the map
     for (const auto& city : _data) {
         std::cout << "City: " << city.first << ", X: " << city.second.x << ", Y: " << city.second.y << std::endl;
 
     }
-    std::cout << _data.size();
+    */
     
 }
 
